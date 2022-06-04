@@ -7,6 +7,7 @@ import cn.nukkit.event.Listener;
 import cn.nukkit.event.player.PlayerMoveEvent;
 import cn.nukkit.event.player.PlayerToggleFlightEvent;
 import cn.nukkit.event.server.DataPacketReceiveEvent;
+import cn.nukkit.item.ItemID;
 import cn.nukkit.network.protocol.AdventureSettingsPacket;
 import cn.nukkit.network.protocol.ProtocolInfo;
 import cn.nukkit.potion.Effect;
@@ -73,6 +74,10 @@ public class Flight implements Listener {
 
         if (!PlayerTasks.lastOnGround.containsKey(player)) return;
 
+        if (AntiSpeedListener.teleports.contains(player.getName())) return;
+
+        if (player.getInventory().getChestplate().getId() == ItemID.ELYTRA || player.getInventory().getItemInHand().getId() == ItemID.TRIDENT) return;
+
         if (PlayerTasks.lastOnGround.get(player).getY() < player.getY() - 2.0) {
             this.plugin.flag("FlightB", player);
             if (checks.containsKey(player.getName())){
@@ -81,7 +86,7 @@ public class Flight implements Listener {
                 checks.put(player.getName(), 1);
             }
 
-            if (checks.get(player.getName()) > 5){
+            if (checks.get(player.getName()) > 8){
                 Revolutionarity.banPlayer(player);
             }
         }

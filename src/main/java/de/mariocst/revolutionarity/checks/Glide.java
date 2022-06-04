@@ -61,7 +61,7 @@ public class Glide implements Listener {
                 checks.put(player.getName(), 1);
             }
 
-            if (checks.get(player.getName()) > 4){
+            if (checks.get(player.getName()) > 7){
                 Revolutionarity.banPlayer(player);
             }
         }

@@ -2,6 +2,11 @@ package de.mariocst.revolutionarity.checks;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
+import cn.nukkit.entity.Entity;
+import cn.nukkit.entity.EntityRideable;
+import cn.nukkit.entity.item.EntityBoat;
+import cn.nukkit.item.ItemID;
+import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector2;
 import cn.nukkit.scheduler.PluginTask;
@@ -47,7 +52,9 @@ public class AntiSpeed extends PluginTask<Revolutionarity> {
                 if (pos.getLevel().getName().equalsIgnoreCase(player.getLevel().getName())
                         && player.getGamemode() == 0
                         && dist > maxSpeed
-                        && !Flight.isFlying(player))
+                        && !Flight.isFlying(player)
+                        && !isRider(player)
+                        && !(player.getInventory().getChestplate().getId() == ItemID.ELYTRA || player.getInventory().getItemInHand().getId() == ItemID.TRIDENT))
                 {
                     this.getOwner().flag("Speed", "Speed: " + Math.round(dist/3) + " blocks in sec, max: " + Math.round(maxSpeed/3) , player);
 
@@ -68,5 +75,19 @@ public class AntiSpeed extends PluginTask<Revolutionarity> {
         }
 
         positions = newPositions;
+    }
+
+    public boolean isRider(Player player){
+        for (Entity entity : player.getChunk().getEntities().values()) {
+            if (entity instanceof EntityRideable) {
+                if (entity.getPassenger() instanceof Player){
+                    if (entity.getPassenger().getName().equalsIgnoreCase(player.getName())){
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 }

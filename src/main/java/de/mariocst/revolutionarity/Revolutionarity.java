@@ -59,6 +59,8 @@ public class Revolutionarity extends PluginBase {
 
     public static ArrayList<String> banned = new ArrayList<>();
 
+    public static HashMap<String, String> lastFlag = new HashMap<>();
+
     @Override
     public void onEnable() {
         this.loadConfigs();
@@ -145,7 +147,7 @@ public class Revolutionarity extends PluginBase {
 
         scheduler.scheduleRepeatingTask(this, new FreezeEventListener(this), 2);
         scheduler.scheduleRepeatingTask(this, new PlayerTasks(this), 2);
-        scheduler.scheduleRepeatingTask(this, new Speed(this), 4);
+        //scheduler.scheduleRepeatingTask(this, new Speed(this), 4);
 
         scheduler.scheduleRepeatingTask(this, new AntiSpeed(this), 60);
         manager.registerEvents(new AntiSpeedListener(), this);
@@ -184,6 +186,8 @@ public class Revolutionarity extends PluginBase {
 
     public void flag(String check, String details, Player flagged) {
         String dtls = details.equals("") ? "" : " Details: " + details;
+
+        lastFlag.put(flagged.getName(), check);
 
         this.warning("The player " + flagged.getName() + " got flagged for " + check + "!" + dtls);
         this.acLogger.log(flagged, check, details);
@@ -270,6 +274,8 @@ public class Revolutionarity extends PluginBase {
     public static void banPlayer(Player player){
         if (!banned.contains(player.getName())){
             Server.getInstance().getScheduler().scheduleDelayedTask(new BanTask(Revolutionarity.getInstance(), player), 5);
+            Server.getInstance().getLogger().info("Player §b" + player.getName() + " §rwas banned, reason: " + lastFlag.get(player.getName()));
+            lastFlag.remove(player.getName());
             banned.add(player.getName());
         }
     }

@@ -2,9 +2,15 @@ package de.mariocst.revolutionarity.listener;
 
 import cn.nukkit.Player;
 import cn.nukkit.event.EventHandler;
+import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.player.PlayerJoinEvent;
+import cn.nukkit.event.player.PlayerQuitEvent;
 import de.mariocst.revolutionarity.Revolutionarity;
+import de.mariocst.revolutionarity.utils.FakePlayer;
+import de.mariocst.revolutionarity.utils.Util;
+
+import java.util.HashMap;
 
 public class JoinListener implements Listener {
     private final Revolutionarity plugin;
@@ -54,6 +60,15 @@ public class JoinListener implements Listener {
             this.plugin.flag("EditionFaker", player);
             this.plugin.getSettings().velo.remove(player);
             this.plugin.getSettings().velo.put(player, this.plugin.getSettings().getMaxVelo());
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
+    public void onQuit(PlayerQuitEvent event){
+        Player player = event.getPlayer();
+
+        for(HashMap<String, Integer> map : Revolutionarity.getChecks()){
+            map.remove(player.getName());
         }
     }
 }

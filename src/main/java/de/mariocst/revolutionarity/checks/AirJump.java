@@ -7,8 +7,12 @@ import cn.nukkit.event.player.PlayerJumpEvent;
 import de.mariocst.revolutionarity.Revolutionarity;
 import de.mariocst.revolutionarity.utils.CheckUtils;
 
+import java.util.HashMap;
+
 public class AirJump implements Listener {
     private final Revolutionarity plugin;
+
+    public static final HashMap<String, Integer> checks = new HashMap<>();
 
     public AirJump(Revolutionarity plugin) {
         this.plugin = plugin;
@@ -29,8 +33,17 @@ public class AirJump implements Listener {
         if (player.getGamemode() == 1 || player.getGamemode() == 3) return;
 
         if (!CheckUtils.isOnGround(player)) {
-            player.teleport(Speed.lastPos.get(player));
             this.plugin.flag("AirJump", player);
+
+            if (checks.containsKey(player.getName())){
+                checks.put(player.getName(), checks.get(player.getName()) + 1);
+            }else{
+                checks.put(player.getName(), 1);
+            }
+
+            if (checks.get(player.getName()) > 4){
+                Revolutionarity.banPlayer(player);
+            }
         }
     }
 }

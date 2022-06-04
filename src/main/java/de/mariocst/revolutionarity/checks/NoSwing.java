@@ -8,8 +8,12 @@ import cn.nukkit.network.protocol.InventoryTransactionPacket;
 import de.mariocst.revolutionarity.Revolutionarity;
 import de.mariocst.revolutionarity.listener.PacketListener;
 
+import java.util.HashMap;
+
 public class NoSwing implements Listener {
     private final Revolutionarity plugin;
+
+    public static final HashMap<String, Integer> checks = new HashMap<>();
 
     public NoSwing(Revolutionarity plugin) {
         this.plugin = plugin;
@@ -36,6 +40,16 @@ public class NoSwing implements Listener {
         if (!PacketListener.containsAnimatePacket(player)) {
             event.setCancelled(true);
             this.plugin.flag("NoSwing", player);
+
+            /*if (checks.containsKey(player.getName())){
+                checks.put(player.getName(), checks.get(player.getName()) + 1);
+            }else{
+                checks.put(player.getName(), 1);
+            }
+
+            if (checks.get(player.getName()) > 8){
+                Revolutionarity.banPlayer(player);
+            }*/
         }
     }
 }

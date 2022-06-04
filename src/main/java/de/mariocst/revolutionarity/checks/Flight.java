@@ -19,6 +19,8 @@ import java.util.HashMap;
 public class Flight implements Listener {
     private final Revolutionarity plugin;
 
+    public static final HashMap<String, Integer> checks = new HashMap<>();
+
     private static final HashMap<Player, Boolean> isFlying = new HashMap<>();
 
     public Flight(Revolutionarity plugin) {
@@ -72,8 +74,16 @@ public class Flight implements Listener {
         if (!PlayerTasks.lastOnGround.containsKey(player)) return;
 
         if (PlayerTasks.lastOnGround.get(player).getY() < player.getY() - 2.0) {
-            player.teleport(PlayerTasks.lastOnGround.get(player));
             this.plugin.flag("FlightB", player);
+            if (checks.containsKey(player.getName())){
+                checks.put(player.getName(), checks.get(player.getName()) + 1);
+            }else{
+                checks.put(player.getName(), 1);
+            }
+
+            if (checks.get(player.getName()) > 5){
+                Revolutionarity.banPlayer(player);
+            }
         }
     }
 

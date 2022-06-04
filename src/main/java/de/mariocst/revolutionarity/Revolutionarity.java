@@ -2,6 +2,7 @@ package de.mariocst.revolutionarity;
 
 import cn.nukkit.IPlayer;
 import cn.nukkit.Player;
+import cn.nukkit.Server;
 import cn.nukkit.command.CommandMap;
 import cn.nukkit.level.Location;
 import cn.nukkit.plugin.PluginBase;
@@ -17,12 +18,17 @@ import de.mariocst.revolutionarity.listener.JoinListener;
 import de.mariocst.revolutionarity.listener.PacketListener;
 import de.mariocst.revolutionarity.listener.PlayerTasks;
 import de.mariocst.revolutionarity.logging.Logger;
+import de.mariocst.revolutionarity.tasks.BanTask;
+import de.mariocst.revolutionarity.tasks.ClearChecks;
+import de.mariocst.revolutionarity.utils.FakePlayer;
+import de.mariocst.revolutionarity.utils.Util;
 import de.mariocst.revolutionarity.webhook.DiscordWebhook;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Revolutionarity extends PluginBase {
@@ -43,16 +49,37 @@ public class Revolutionarity extends PluginBase {
 
     private Logger acLogger;
 
+    public static ArrayList<HashMap<String, Integer>> checks = new ArrayList<>();
+
+    private static Revolutionarity instance;
+
+    public static Revolutionarity getInstance(){
+        return instance;
+    }
+
+    public static ArrayList<String> banned = new ArrayList<>();
+
     @Override
     public void onEnable() {
         this.loadConfigs();
         this.register();
+
+        instance = this;
 
         this.acLogger = new Logger(this);
 
         if (this.pluginSettings.getDiscordWebhookLink().equals("")) this.warning("No discord webhook link entered!");
 
         this.log("Revolutionarity AntiCheat loaded on version " + this.getDescription().getVersion() + "!");
+
+        checks.add(Flight.checks);
+        checks.add(Glide.checks);
+        checks.add(AirJump.checks);
+        checks.add(KillAuraBot.checks);
+    }
+
+    public static ArrayList <HashMap<String, Integer>> getChecks(){
+        return checks;
     }
 
     @Override
@@ -60,6 +87,11 @@ public class Revolutionarity extends PluginBase {
         this.saveConfigs();
 
         this.log("Revolutionarity AntiCheat unloaded!");
+
+        for (FakePlayer fpl : KillAuraBot.bots.values()){
+            fpl.despawnFromAll();
+            fpl.close();
+        }
     }
 
     public void log(String msg) {
@@ -97,22 +129,27 @@ public class Revolutionarity extends PluginBase {
         manager.registerEvents(new BlockReach(this), this);
         manager.registerEvents(new Flight(this), this);
         manager.registerEvents(new Glide(this), this);
-        manager.registerEvents(new KillAura(this), this);
-        manager.registerEvents(new NoSwing(this), this);
+        //manager.registerEvents(new KillAura(this), this);
+        manager.registerEvents(new KillAuraBot(this), this);
+        //manager.registerEvents(new NoSwing(this), this);
         manager.registerEvents(new Reach(this), this);
         manager.registerEvents(new SelfHit(this), this);
-        manager.registerEvents(new Step(this), this);
+        //manager.registerEvents(new Step(this), this);
 
         manager.registerEvents(new JoinListener(this), this);
         manager.registerEvents(new PacketListener(), this);
 
         ServerScheduler scheduler = this.getServer().getScheduler();
 
-        scheduler.scheduleRepeatingTask(this, new FreezeEventListener(this), 1);
-        scheduler.scheduleRepeatingTask(this, new PlayerTasks(this), 1);
-        scheduler.scheduleRepeatingTask(this, new Speed(this), 1);
+        scheduler.scheduleRepeatingTask(this, new FreezeEventListener(this), 2);
+        scheduler.scheduleRepeatingTask(this, new PlayerTasks(this), 2);
+        scheduler.scheduleRepeatingTask(this, new Speed(this), 4);
+
+        scheduler.scheduleRepeatingTask(this, new ClearChecks(this), 900);
 
         this.reportForm = new ReportForm();
+
+        Util.setupSkinStream();
     }
 
     public void sendReport(Player player, IPlayer reported, String reason) throws IOException {
@@ -165,7 +202,8 @@ public class Revolutionarity extends PluginBase {
 
         if (velo >= this.settings.getMaxVelo()) {
             this.settings.velo.remove(flagged);
-            flagged.kick(this.pluginSettings.getKickMessage().replaceAll("%newline%", "\n"), false);
+            banPlayer(flagged);
+            //flagged.kick(this.pluginSettings.getKickMessage().replaceAll("%newline%", "\n"), false);
             this.acLogger.log("Player " + flagged.getName() + " got kicked");
 
             for (Player player : this.getServer().getOnlinePlayers().values()) {
@@ -221,6 +259,13 @@ public class Revolutionarity extends PluginBase {
             catch (IOException e) {
                 this.getLogger().error(e.getLocalizedMessage());
             }
+        }
+    }
+
+    public static void banPlayer(Player player){
+        if (!banned.contains(player.getName())){
+            Server.getInstance().getScheduler().scheduleDelayedTask(new BanTask(Revolutionarity.getInstance(), player), 5);
+            banned.add(player.getName());
         }
     }
 

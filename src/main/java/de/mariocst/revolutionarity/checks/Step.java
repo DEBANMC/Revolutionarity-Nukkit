@@ -27,8 +27,7 @@ public class Step implements Listener {
 
         double diff = player.getY() - Speed.lastPos.get(player).getY();
 
-        if (diff >= 1.2) {
-            event.setCancelled(true);
+        if (diff >= 1.7) {
             this.plugin.flag("Step", "Height: " + diff, player);
         }
     }

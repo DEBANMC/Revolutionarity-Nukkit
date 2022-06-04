@@ -51,7 +51,7 @@ public class KillAuraBot implements Listener {
             bots.get(player.getName()).teleport(player.getPosition().add(0.5, 2.5, 0.5));
 
             if(!waitTeleport.contains(bots.get(player.getName()).getId())){
-                Server.getInstance().getScheduler().scheduleDelayedTask(new TeleportTask(Revolutionarity.getInstance(), bots.get(player.getName()), bots.get(player.getName()).getPosition().add(0, 400)), 15);
+                Server.getInstance().getScheduler().scheduleDelayedTask(new TeleportTask(Revolutionarity.getInstance(), bots.get(player.getName()), bots.get(player.getName()).getPosition().add(0, 400)), 12);
                 waitTeleport.add(bots.get(player.getName()).getId());
             }
             return;
@@ -94,7 +94,7 @@ public class KillAuraBot implements Listener {
         bots.put(player.getName(), fplayer);
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
 

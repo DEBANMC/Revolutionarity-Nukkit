@@ -76,6 +76,7 @@ public class Revolutionarity extends PluginBase {
         checks.add(Glide.checks);
         checks.add(AirJump.checks);
         checks.add(KillAuraBot.checks);
+        checks.add(AntiSpeed.checks);
     }
 
     public static ArrayList <HashMap<String, Integer>> getChecks(){
@@ -129,12 +130,13 @@ public class Revolutionarity extends PluginBase {
         manager.registerEvents(new BlockReach(this), this);
         manager.registerEvents(new Flight(this), this);
         manager.registerEvents(new Glide(this), this);
-        //manager.registerEvents(new KillAura(this), this);
         manager.registerEvents(new KillAuraBot(this), this);
-        //manager.registerEvents(new NoSwing(this), this);
         manager.registerEvents(new Reach(this), this);
         manager.registerEvents(new SelfHit(this), this);
+
         //manager.registerEvents(new Step(this), this);
+        //manager.registerEvents(new KillAura(this), this);
+        //manager.registerEvents(new NoSwing(this), this);
 
         manager.registerEvents(new JoinListener(this), this);
         manager.registerEvents(new PacketListener(), this);
@@ -144,6 +146,9 @@ public class Revolutionarity extends PluginBase {
         scheduler.scheduleRepeatingTask(this, new FreezeEventListener(this), 2);
         scheduler.scheduleRepeatingTask(this, new PlayerTasks(this), 2);
         scheduler.scheduleRepeatingTask(this, new Speed(this), 4);
+
+        scheduler.scheduleRepeatingTask(this, new AntiSpeed(this), 60);
+        manager.registerEvents(new AntiSpeedListener(), this);
 
         scheduler.scheduleRepeatingTask(this, new ClearChecks(this), 900);
 

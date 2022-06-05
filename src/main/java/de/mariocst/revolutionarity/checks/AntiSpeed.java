@@ -64,11 +64,11 @@ public class AntiSpeed extends PluginTask<Revolutionarity> {
                         checks.put(player.getName(), 1);
                     }
 
-                    if (checks.get(player.getName()) > 4){
-                        Revolutionarity.banPlayer(player);
+                    if (checks.get(player.getName()) > 3){
+                        Revolutionarity.banPlayer(player, "Speed");
+                        checks.remove(player.getName());
                     }
                 }
-
             }
 
             newPositions.put(player.getName(), player.getPosition());

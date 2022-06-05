@@ -59,8 +59,6 @@ public class Revolutionarity extends PluginBase {
 
     public static ArrayList<String> banned = new ArrayList<>();
 
-    public static HashMap<String, String> lastFlag = new HashMap<>();
-
     @Override
     public void onEnable() {
         this.loadConfigs();
@@ -187,8 +185,6 @@ public class Revolutionarity extends PluginBase {
     public void flag(String check, String details, Player flagged) {
         String dtls = details.equals("") ? "" : " Details: " + details;
 
-        lastFlag.put(flagged.getName(), check);
-
         this.warning("The player " + flagged.getName() + " got flagged for " + check + "!" + dtls);
         this.acLogger.log(flagged, check, details);
 
@@ -209,7 +205,7 @@ public class Revolutionarity extends PluginBase {
             }
         }
 
-        if (velo >= this.settings.getMaxVelo()) {
+        /*if (velo >= this.settings.getMaxVelo()) {
             this.settings.velo.remove(flagged);
             banPlayer(flagged);
             //flagged.kick(this.pluginSettings.getKickMessage().replaceAll("%newline%", "\n"), false);
@@ -220,7 +216,7 @@ public class Revolutionarity extends PluginBase {
                     player.sendMessage(this.getPrefix() + "The player " + flagged.getName() + " got kicked for cheating!");
                 }
             }
-        }
+        }*/
 
         if (this.pluginSettings.getDiscordWebhookLink().equals("")) return;
 
@@ -271,12 +267,13 @@ public class Revolutionarity extends PluginBase {
         }
     }
 
-    public static void banPlayer(Player player){
+    public static void banPlayer(Player player, String reason){
         if (!banned.contains(player.getName())){
-            Server.getInstance().getScheduler().scheduleDelayedTask(new BanTask(Revolutionarity.getInstance(), player), 5);
-            Server.getInstance().getLogger().info("Player §b" + player.getName() + " §rwas banned, reason: " + lastFlag.get(player.getName()));
-            lastFlag.remove(player.getName());
-            banned.add(player.getName());
+            player.sendMessage("Причина: " + reason);
+            //player.kick("Тестовый кик, причина: " + lastFlag.get(player.getName()), false);//erm
+            //Server.getInstance().getScheduler().scheduleDelayedTask(new BanTask(Revolutionarity.getInstance(), player), 5);
+            Server.getInstance().getLogger().info("Player §b" + player.getName() + " §rwas banned, reason: " + reason);
+            //banned.add(player.getName());
         }
     }
 

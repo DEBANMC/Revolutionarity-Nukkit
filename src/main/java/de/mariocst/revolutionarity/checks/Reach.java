@@ -11,8 +11,12 @@ import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.level.Location;
 import de.mariocst.revolutionarity.Revolutionarity;
 
+import java.util.HashMap;
+
 public class Reach implements Listener {
     private final Revolutionarity plugin;
+
+    public static final HashMap<String, Integer> checks = new HashMap<>();
 
     public Reach(Revolutionarity plugin) {
         this.plugin = plugin;
@@ -48,6 +52,17 @@ public class Reach implements Listener {
                 if (eyeHeight.distance(hitAt) >= maxReach) {
                     this.plugin.flag("Reach", "Reach: " + eyeHeight.distance(hitAt), player);
                     event.setCancelled(true);
+
+                    if (checks.containsKey(player.getName())){
+                        checks.put(player.getName(), checks.get(player.getName()) + 1);
+                    }else{
+                        checks.put(player.getName(), 1);
+                    }
+
+                    if (checks.get(player.getName()) > 4){
+                        Revolutionarity.banPlayer(player, "Reach");
+                        checks.remove(player.getName());
+                    }
                 }
             }
             else {
@@ -56,6 +71,17 @@ public class Reach implements Listener {
                 if (eyeHeight.distance(hitAt) >= maxReach) {
                     this.plugin.flag("Reach", "Reach: " + eyeHeight.distance(hitAt), player);
                     event.setCancelled(true);
+
+                    if (checks.containsKey(player.getName())){
+                        checks.put(player.getName(), checks.get(player.getName()) + 1);
+                    }else{
+                        checks.put(player.getName(), 1);
+                    }
+
+                    if (checks.get(player.getName()) > 4){
+                        Revolutionarity.banPlayer(player, "Reach");
+                        checks.remove(player.getName());
+                    }
                 }
             }
         }
@@ -65,6 +91,17 @@ public class Reach implements Listener {
             if (eyeHeight.distance(hitAt) >= maxReach) {
                 this.plugin.flag("Reach", "Reach: " + eyeHeight.distance(hitAt), player);
                 event.setCancelled(true);
+
+                if (checks.containsKey(player.getName())){
+                    checks.put(player.getName(), checks.get(player.getName()) + 1);
+                }else{
+                    checks.put(player.getName(), 1);
+                }
+
+                if (checks.get(player.getName()) > 4){
+                    Revolutionarity.banPlayer(player, "Reach");
+                    checks.remove(player.getName());
+                }
             }
         }
     }

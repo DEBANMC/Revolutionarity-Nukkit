@@ -51,8 +51,6 @@ public class Glide implements Listener {
         if (!this.ticksInAir.containsKey(player)) return;
 
         if (this.ticksInAir.get(player) >= this.plugin.getSettings().getMaxTicksInAir()) {
-            event.setCancelled(true);
-            if (player.getLevel().getBlock(player.getLocation().add(0.0, -0.5, 0.0)).getId() == BlockID.AIR) player.teleport(player.getLocation().add(0.0, -0.5, 0.0));
             this.plugin.flag("Glide", "AirTime: " + this.ticksInAir.get(player) + "/" + this.plugin.getSettings().getMaxTicksInAir(), player);
 
             if (checks.containsKey(player.getName())){
@@ -61,8 +59,9 @@ public class Glide implements Listener {
                 checks.put(player.getName(), 1);
             }
 
-            if (checks.get(player.getName()) > 7){
-                Revolutionarity.banPlayer(player);
+            if (checks.get(player.getName()) > 5){
+                Revolutionarity.banPlayer(player, "Glide");
+                checks.remove(player.getName());
             }
         }
     }

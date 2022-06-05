@@ -57,7 +57,7 @@ public class Settings {
             this.maxBlockReach = this.config.getDouble("maxBlockReach");
         }
         else {
-            this.maxBlockReach = 6.2;
+            this.maxBlockReach = 7.5;
         }
 
         if (this.config.containsKey("editionFaker")) {
@@ -99,7 +99,7 @@ public class Settings {
             this.maxYaw = this.config.getDouble("maxYaw");
         }
         else {
-            this.maxYaw = 66.0;
+            this.maxYaw = 160.0;
         }
 
         if (this.config.containsKey("noSwing")) {
@@ -120,7 +120,7 @@ public class Settings {
             this.maxReach = this.config.getDouble("maxReach");
         }
         else {
-            this.maxReach = 3.6;
+            this.maxReach = 4.2;
         }
 
         if (this.config.containsKey("selfHit")) {
@@ -134,7 +134,7 @@ public class Settings {
             this.speed = this.config.getBoolean("speed");
         }
         else {
-            this.speed = false;
+            this.speed = true;
         }
 
         if (this.config.containsKey("step")) {

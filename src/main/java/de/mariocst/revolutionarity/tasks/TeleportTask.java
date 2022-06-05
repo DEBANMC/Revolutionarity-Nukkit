@@ -21,7 +21,7 @@ public class TeleportTask extends PluginTask<Revolutionarity> {
 
     @Override
     public void onRun(int i) {
-        if (fplayer != null){
+        if (fplayer != null && KillAuraBot.waitTeleport.contains(fplayer.getId())){
             fplayer.teleport(pos);
             KillAuraBot.waitTeleport.remove(fplayer.getId());
         }

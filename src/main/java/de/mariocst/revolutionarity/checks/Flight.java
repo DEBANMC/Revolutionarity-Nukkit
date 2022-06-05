@@ -80,6 +80,7 @@ public class Flight implements Listener {
 
         if (PlayerTasks.lastOnGround.get(player).getY() < player.getY() - 2.0) {
             this.plugin.flag("FlightB", player);
+
             if (checks.containsKey(player.getName())){
                 checks.put(player.getName(), checks.get(player.getName()) + 1);
             }else{
@@ -87,7 +88,8 @@ public class Flight implements Listener {
             }
 
             if (checks.get(player.getName()) > 8){
-                Revolutionarity.banPlayer(player);
+                Revolutionarity.banPlayer(player, "Flight");
+                checks.remove(player.getName());
             }
         }
     }

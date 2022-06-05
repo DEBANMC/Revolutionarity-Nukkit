@@ -9,6 +9,7 @@ import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.player.PlayerJoinEvent;
 import cn.nukkit.event.player.PlayerQuitEvent;
+import cn.nukkit.event.player.PlayerTeleportEvent;
 import cn.nukkit.level.Location;
 import de.mariocst.revolutionarity.Revolutionarity;
 import de.mariocst.revolutionarity.tasks.TeleportTask;
@@ -48,10 +49,10 @@ public class KillAuraBot implements Listener {
                 player.isOp()) return;
 
         if (!(event.getEntity() instanceof FakePlayer)) {
-            bots.get(player.getName()).teleport(player.getPosition().add(0.5, 2.5, 0.5));
+            bots.get(player.getName()).teleport(player.getPosition().add(0, 2.5, 0));
 
             if(!waitTeleport.contains(bots.get(player.getName()).getId())){
-                Server.getInstance().getScheduler().scheduleDelayedTask(new TeleportTask(Revolutionarity.getInstance(), bots.get(player.getName()), bots.get(player.getName()).getPosition().add(0, 400)), 12);
+                Server.getInstance().getScheduler().scheduleDelayedTask(new TeleportTask(Revolutionarity.getInstance(), bots.get(player.getName()), player.getPosition().add(0, 400)), 12);
                 waitTeleport.add(bots.get(player.getName()).getId());
             }
             return;
@@ -60,11 +61,11 @@ public class KillAuraBot implements Listener {
         FakePlayer fplayer = (FakePlayer) event.getEntity();
 
         if(!waitTeleport.contains(fplayer.getId())){
-            Server.getInstance().getScheduler().scheduleDelayedTask(new TeleportTask(Revolutionarity.getInstance(), fplayer, fplayer.getPosition().add(0, 400)), 65);
+            Server.getInstance().getScheduler().scheduleDelayedTask(new TeleportTask(Revolutionarity.getInstance(), fplayer, player.getPosition().add(0, 400)), 65);
             waitTeleport.add(fplayer.getId());
         }
 
-        this.plugin.flag("KillAura", "Bot of: " + player.getName(), player);
+        this.plugin.flag("KillAura", "Bot by: " + player.getName() + " with id: " + fplayer.getId(), player);
 
         if (checks.containsKey(player.getName())){
             checks.put(player.getName(), checks.get(player.getName()) + 1);
@@ -73,7 +74,8 @@ public class KillAuraBot implements Listener {
         }
 
         if (checks.get(player.getName()) > 4){
-            Revolutionarity.banPlayer(player);
+            Revolutionarity.banPlayer(player, "KillAura");
+            checks.remove(player.getName());
         }
 
         event.setCancelled(true);
@@ -86,12 +88,10 @@ public class KillAuraBot implements Listener {
         FakePlayer fplayer = new FakePlayer(player.getPosition().add(0, 3), Util.skinArray);
         fplayer.spawnFakePlayer(player);
 
-        if(!waitTeleport.contains(fplayer.getId())){
-            Server.getInstance().getScheduler().scheduleDelayedTask(new TeleportTask(Revolutionarity.getInstance(), fplayer, fplayer.getPosition().add(0, 400)), 65);
-            waitTeleport.add(fplayer.getId());
-        }
-
         bots.put(player.getName(), fplayer);
+
+        Server.getInstance().getScheduler().scheduleDelayedTask(new TeleportTask(Revolutionarity.getInstance(), fplayer, fplayer.getPosition().add(0, 400)), 65);
+        waitTeleport.add(fplayer.getId());
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
@@ -110,6 +110,25 @@ public class KillAuraBot implements Listener {
     public void onEntDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof FakePlayer){
             event.setCancelled();
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    public void onPlTeleport(PlayerTeleportEvent event) {
+        Player player = event.getPlayer();
+
+        if (!event.getFrom().getLevelName().equalsIgnoreCase(event.getTo().getLevelName())){
+            if (bots.containsKey(player.getName()) && bots.get(player.getName()) != null){
+                bots.get(player.getName()).despawnFromAll();
+                bots.get(player.getName()).close();
+
+                bots.remove(player.getName());
+            }
+
+            FakePlayer fplayer = new FakePlayer(event.getTo().add(0, 400), Util.skinArray);
+            fplayer.spawnFakePlayer(player);
+
+            bots.put(player.getName(), fplayer);
         }
     }
 }

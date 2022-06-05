@@ -42,7 +42,8 @@ public class AirJump implements Listener {
             }
 
             if (checks.get(player.getName()) > 4){
-                Revolutionarity.banPlayer(player);
+                Revolutionarity.banPlayer(player, "AirJump");
+                checks.remove(player.getName());
             }
         }
     }

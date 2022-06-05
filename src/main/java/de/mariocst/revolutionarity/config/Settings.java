@@ -43,7 +43,7 @@ public class Settings {
             this.antiImmobile = this.config.getBoolean("antiImmobile");
         }
         else {
-            this.antiImmobile = true;
+            this.antiImmobile = false;
         }
 
         if (this.config.containsKey("blockReach")) {
@@ -78,7 +78,7 @@ public class Settings {
             this.glide = this.config.getBoolean("glide");
         }
         else {
-            this.glide = true;
+            this.glide = false;
         }
 
         if (this.config.containsKey("maxTicksInAir")) {
@@ -120,7 +120,7 @@ public class Settings {
             this.maxReach = this.config.getDouble("maxReach");
         }
         else {
-            this.maxReach = 4.2;
+            this.maxReach = 5.6;
         }
 
         if (this.config.containsKey("selfHit")) {

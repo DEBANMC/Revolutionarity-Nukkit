@@ -49,6 +49,8 @@ public class AntiSpeed extends PluginTask<Revolutionarity> {
                 double maxSpeed = 35;
                 double dist = new Vector2(pos.getFloorX(), pos.getFloorZ()).distance(new Vector2(player.getPosition().getFloorX(), player.getPosition().getFloorZ()));
 
+                if (dist == 0) return;
+
                 if (pos.getLevel().getName().equalsIgnoreCase(player.getLevel().getName())
                         && player.getGamemode() == 0
                         && dist > maxSpeed
@@ -64,7 +66,7 @@ public class AntiSpeed extends PluginTask<Revolutionarity> {
                         checks.put(player.getName(), 1);
                     }
 
-                    if (checks.get(player.getName()) > 3){
+                    if (checks.get(player.getName()) > 2){
                         Revolutionarity.banPlayer(player, "Speed");
                         checks.remove(player.getName());
                     }

@@ -127,7 +127,6 @@ public class Revolutionarity extends PluginBase {
         PluginManager manager = this.getServer().getPluginManager();
 
         manager.registerEvents(new AirJump(this), this);
-        manager.registerEvents(new AntiImmobile(this), this);
         manager.registerEvents(new BlockReach(this), this);
         manager.registerEvents(new Flight(this), this);
         manager.registerEvents(new Glide(this), this);
@@ -135,17 +134,18 @@ public class Revolutionarity extends PluginBase {
         manager.registerEvents(new Reach(this), this);
         manager.registerEvents(new SelfHit(this), this);
 
+        //manager.registerEvents(new AntiImmobile(this), this);
         //manager.registerEvents(new Step(this), this);
         //manager.registerEvents(new KillAura(this), this);
         //manager.registerEvents(new NoSwing(this), this);
 
         manager.registerEvents(new JoinListener(this), this);
-        manager.registerEvents(new PacketListener(), this);
+        //manager.registerEvents(new PacketListener(), this);
 
         ServerScheduler scheduler = this.getServer().getScheduler();
 
-        scheduler.scheduleRepeatingTask(this, new FreezeEventListener(this), 2);
-        scheduler.scheduleRepeatingTask(this, new PlayerTasks(this), 2);
+        //scheduler.scheduleRepeatingTask(this, new FreezeEventListener(this), 2);
+        scheduler.scheduleRepeatingTask(this, new PlayerTasks(this), 10);
         //scheduler.scheduleRepeatingTask(this, new Speed(this), 4);
 
         scheduler.scheduleRepeatingTask(this, new AntiSpeed(this), 60);

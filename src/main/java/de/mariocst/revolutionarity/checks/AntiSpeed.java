@@ -46,7 +46,7 @@ public class AntiSpeed extends PluginTask<Revolutionarity> {
                     continue;
                 }
 
-                double maxSpeed = 34;
+                double maxSpeed = 35;
                 double dist = new Vector2(pos.getFloorX(), pos.getFloorZ()).distance(new Vector2(player.getPosition().getFloorX(), player.getPosition().getFloorZ()));
 
                 if (pos.getLevel().getName().equalsIgnoreCase(player.getLevel().getName())

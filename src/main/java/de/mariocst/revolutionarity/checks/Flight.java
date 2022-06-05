@@ -87,7 +87,7 @@ public class Flight implements Listener {
                 checks.put(player.getName(), 1);
             }
 
-            if (checks.get(player.getName()) > 8){
+            if (checks.get(player.getName()) > 7){
                 Revolutionarity.banPlayer(player, "Flight");
                 checks.remove(player.getName());
             }

@@ -37,6 +37,7 @@ public class JoinListener implements Listener {
                     this.plugin.flag("ToolBox", "Device model: " + player.getLoginChainData().getDeviceModel(), player);
                     this.plugin.getSettings().velo.remove(player);
                     this.plugin.getSettings().velo.put(player, this.plugin.getSettings().getMaxVelo());
+                    //Revolutionarity.banPlayer(player, "ToolBox");
                 }
             }
             else {
@@ -44,6 +45,7 @@ public class JoinListener implements Listener {
                     this.plugin.flag("ToolBox", "Device model: " + player.getLoginChainData().getDeviceModel(), player);
                     this.plugin.getSettings().velo.remove(player);
                     this.plugin.getSettings().velo.put(player, this.plugin.getSettings().getMaxVelo());
+                    //Revolutionarity.banPlayer(player, "ToolBox");
                 }
             }
         }
@@ -60,6 +62,7 @@ public class JoinListener implements Listener {
             this.plugin.flag("EditionFaker", player);
             this.plugin.getSettings().velo.remove(player);
             this.plugin.getSettings().velo.put(player, this.plugin.getSettings().getMaxVelo());
+            Revolutionarity.banPlayer(player, "EditionFaker");
         }
     }
 

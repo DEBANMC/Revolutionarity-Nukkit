@@ -20,6 +20,7 @@ import de.mariocst.revolutionarity.listener.PlayerTasks;
 import de.mariocst.revolutionarity.logging.Logger;
 import de.mariocst.revolutionarity.tasks.BanTask;
 import de.mariocst.revolutionarity.tasks.ClearChecks;
+import de.mariocst.revolutionarity.tasks.KickTask;
 import de.mariocst.revolutionarity.utils.FakePlayer;
 import de.mariocst.revolutionarity.utils.Util;
 import de.mariocst.revolutionarity.webhook.DiscordWebhook;
@@ -269,11 +270,10 @@ public class Revolutionarity extends PluginBase {
 
     public static void banPlayer(Player player, String reason){
         if (!banned.contains(player.getName())){
-            player.sendMessage("Причина: " + reason);
-            //player.kick("Тестовый кик, причина: " + lastFlag.get(player.getName()), false);//erm
             //Server.getInstance().getScheduler().scheduleDelayedTask(new BanTask(Revolutionarity.getInstance(), player), 5);
+            Server.getInstance().getScheduler().scheduleDelayedTask(new KickTask(Revolutionarity.getInstance(), player, reason), 5);
             Server.getInstance().getLogger().info("Player §b" + player.getName() + " §rwas banned, reason: " + reason);
-            //banned.add(player.getName());
+            banned.add(player.getName());
         }
     }
 

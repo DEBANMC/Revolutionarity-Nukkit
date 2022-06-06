@@ -5,6 +5,7 @@ import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.player.PlayerJumpEvent;
 import de.mariocst.revolutionarity.Revolutionarity;
+import de.mariocst.revolutionarity.listener.PlayerTasks;
 import de.mariocst.revolutionarity.utils.CheckUtils;
 
 import java.util.HashMap;
@@ -45,6 +46,9 @@ public class AirJump implements Listener {
                 Revolutionarity.banPlayer(player, "AirJump");
                 checks.remove(player.getName());
             }
+        }else{
+            PlayerTasks.lastOnGround.remove(player);
+            PlayerTasks.lastOnGround.put(player, player.getLocation());
         }
     }
 }

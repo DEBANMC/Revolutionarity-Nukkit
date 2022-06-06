@@ -78,7 +78,7 @@ public class Flight implements Listener {
 
         if (player.getInventory().getChestplate().getId() == ItemID.ELYTRA || player.getInventory().getItemInHand().getId() == ItemID.TRIDENT) return;
 
-        if (PlayerTasks.lastOnGround.get(player).getY() < player.getY() - 2.0) {
+        if (PlayerTasks.lastOnGround.get(player).getY() < player.getY() - 3.5) {
             this.plugin.flag("FlightB", player);
 
             if (checks.containsKey(player.getName())){

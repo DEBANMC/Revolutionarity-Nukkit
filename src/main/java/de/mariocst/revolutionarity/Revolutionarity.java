@@ -145,7 +145,7 @@ public class Revolutionarity extends PluginBase {
         ServerScheduler scheduler = this.getServer().getScheduler();
 
         //scheduler.scheduleRepeatingTask(this, new FreezeEventListener(this), 2);
-        scheduler.scheduleRepeatingTask(this, new PlayerTasks(this), 10);
+        scheduler.scheduleRepeatingTask(this, new PlayerTasks(this), 20);
         //scheduler.scheduleRepeatingTask(this, new Speed(this), 4);
 
         scheduler.scheduleRepeatingTask(this, new AntiSpeed(this), 60);
